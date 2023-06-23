@@ -1,3 +1,6 @@
 [submodule "third_party_libraries/rtaudio"]
 	path = third_party_libraries/rtaudio
 	url = https://github.com/thestk/rtaudio.git
+[submodule "BRTLibrary"]
+	path = BRTLibrary
+	url = https://github.com/GrupoDiana/BRTLibrary.git
