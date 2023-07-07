@@ -69,8 +69,8 @@ Common::CEarPair<CMonoBuffer<float>>	outputBufferStereo;									 // Stereo buff
 std::vector<float>						samplesVectorSource1;			                     // Storages the audio from the wav files
 std::vector<float>						samplesVectorSource2;			                        // Storages the audio from the wav files
 
-unsigned int							wavSamplePositionSpeech, positionEndFrameSpeech,	 // Storages, respectively, the starting and ending position of the frame being rendered for each source
-                                        wavSamplePositionSteps,  positionEndFrameSteps ;
+unsigned int							wavSamplePositionSource1, positionEndFrameSource1,	 // Storages, respectively, the starting and ending position of the frame being rendered for each source
+                                        wavSamplePositionSource2,  positionEndFrameSource2 ;
 
 
 

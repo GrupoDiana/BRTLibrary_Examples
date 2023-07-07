@@ -246,14 +246,14 @@ static int rtAudioCallback(void *outputBuffer, void *inputBuffer, unsigned int u
 void audioProcess(Common::CEarPair<CMonoBuffer<float>> & bufferOutput, int uiBufferSize)
 {
     // Declaration, initialization and filling mono buffers
-    CMonoBuffer<float> speechInput(uiBufferSize);	FillBuffer(speechInput, wavSamplePositionSpeech, positionEndFrameSpeech, samplesVectorSource1);
-    CMonoBuffer<float> stepsInput (uiBufferSize);	FillBuffer(stepsInput,  wavSamplePositionSteps,  positionEndFrameSteps,  samplesVectorSource2 );
+    CMonoBuffer<float> source1Input(uiBufferSize);	FillBuffer(source1Input, wavSamplePositionSource1, positionEndFrameSource1, samplesVectorSource1);
+    CMonoBuffer<float> source2Input (uiBufferSize);	FillBuffer(source2Input,  wavSamplePositionSource2,  positionEndFrameSource2,  samplesVectorSource2 );
     
     // Declaration of stereo buffer
     Common::CEarPair<CMonoBuffer<float>> bufferProcessed;
     
-    source1BRT->SetBuffer(speechInput);           // Set samples in the sound source
-    source2BRT->SetBuffer(stepsInput);             // Set samples in the sound source        
+    source1BRT->SetBuffer(source1Input);           // Set samples in the sound source
+    source2BRT->SetBuffer(source2Input);             // Set samples in the sound source        
     brtManager.ProcessAll();                        // Process all	      
     listener->GetBuffers(bufferProcessed.left, bufferProcessed.right);          // Get out buffers
     
