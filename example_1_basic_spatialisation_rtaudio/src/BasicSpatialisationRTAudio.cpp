@@ -40,8 +40,8 @@ int main()
     else       */                       bEnableReverb = false;
     
     // Configure BRT Error handler
-    ERRORHANDLER3DTI.SetVerbosityMode(VERBOSITYMODE_ERRORSANDWARNINGS);
-    ERRORHANDLER3DTI.SetErrorLogStream(&std::cout, true);
+    BRT_ERRORHANDLER.SetVerbosityMode(VERBOSITYMODE_ERRORSANDWARNINGS);
+    BRT_ERRORHANDLER.SetErrorLogStream(&std::cout, true);
 
     // Global Parametert setup    
     globalParameters.SetSampleRate(SAMPLERATE);     // Setting sample rate
@@ -78,28 +78,31 @@ int main()
     }
          
     /////////////////////
-    // Speech source setup
-    /////////////////////
-    
+    // source1 setup
+    /////////////////////    
     brtManager.BeginSetup();
-        sourceSpeech = brtManager.CreateSoundSource<BRTSourceModel::CSourceSimpleModel>("speech");      // Instatiate a BRT Sound Source
-        listener->ConnectSoundSource(sourceSpeech);                                                     // Connecto Source to the listener
+        source1BRT = brtManager.CreateSoundSource<BRTSourceModel::CSourceSimpleModel>("speech");    // Instatiate a BRT Sound Source
+        listener->ConnectSoundSource(source1BRT);                                                   // Connect Source to the listener
     brtManager.EndSetup();
-    LoadWav(samplesVectorSpeech, SOURCE1_FILEPATH);											 // Loading .wav file
-    Common::CTransform sourceSpeechPosition = Common::CTransform();
-    sourceSpeechPosition.SetPosition(Common::CVector3(0, 2, 0));						 // Setting source in x=0,y=2,z=0 (on the left)
-    sourceSpeech->SetSourceTransform(sourceSpeechPosition);
+    LoadWav(samplesVectorSource1, SOURCE1_FILEPATH);											    // Loading .wav file            
+    Common::CTransform source1 = Common::CTransform();                         
+    source1.SetPosition(Spherical2Cartesians(SOURCE1_INITIAL_AZIMUTH, SOURCE1_INITIAL_ELEVATION, SOURCE1_INITIAL_DISTANCE));
+    source1BRT->SetSourceTransform(source1);                                           // Set source1 position
             
-    // Steps source setup
+    /////////////////////
+    // source2 setup
+    /////////////////////
     brtManager.BeginSetup();
-        sourceSteps = brtManager.CreateSoundSource<BRTSourceModel::CSourceSimpleModel>("steps");      // Instatiate a BRT Sound Source
-        listener->ConnectSoundSource(sourceSteps);                                                     // Connecto Source to the listener
+        source2BRT = brtManager.CreateSoundSource<BRTSourceModel::CSourceSimpleModel>("steps");      // Instatiate a BRT Sound Source
+        listener->ConnectSoundSource(source2BRT);                                                    // Connect Source to the listener
     brtManager.EndSetup();    
-    LoadWav(samplesVectorSteps, SOURCE2_FILEPATH);											   // Loading .wav file
-    Common::CTransform sourceStepsPosition = Common::CTransform();
-    sourceStepsPosition.SetPosition(Common::CVector3(-3, 10, -10));						 // Setting source in (-3,10,-10)
-    sourceSteps->SetSourceTransform(sourceStepsPosition);        
-    sourcePosition = sourceStepsPosition;												 // Saving initial position into source position to move the steps audio source later on
+    LoadWav(samplesVectorSource2, SOURCE2_FILEPATH);											   // Loading .wav file    
+    source2Azimuth      = SOURCE2_INITIAL_AZIMUTH;
+    source2Elevation    = SOURCE2_INITIAL_ELEVATION;
+    source2Distance     = SOURCE2_INITIAL_DISTANCE;
+    Common::CTransform source2 = Common::CTransform();
+    source2.SetPosition(Spherical2Cartesians(source2Azimuth, source2Elevation, source2Distance));
+    source2BRT->SetSourceTransform(source2);                                           // Set source2 position
 
 
     // Declaration and initialization of stereo buffer
@@ -107,60 +110,7 @@ int main()
   	outputBufferStereo.right.resize(iBufferSize);
 
 
-    // Audio output configuration, using RtAudio (more info in https://www.music.mcgill.ca/~gary/rtaudio/)
-    audio = std::shared_ptr<RtAudio>(new RtAudio());  // Initialization of RtAudio
-                                                      // It uses the first API it founds compiled and requires of preprocessor definitions
-                                                      // which depends on the OS used and the audio output device (more info in https://www.music.mcgill.ca/~gary/rtaudio/compiling.html)
-
-    // Setting the output parameters
-    RtAudio::StreamParameters outputParameters;
-    outputParameters.nChannels = 2;									 // Setting output as stereo 
-		
-	//outputParameters.deviceId = audio->getDefaultOutputDevice();	 // Choosing default output device
-	outputParameters.deviceId = SelectAudioDevice();								// Give user the option to choose the output device	
-
-
-
-    // Setting the audio stream options flags.
-    RtAudio::StreamOptions options;
-    options.flags = RTAUDIO_SCHEDULE_REALTIME;						 // Setting real-time audio output, comment this and uncomment next block to choose the flags of RTAudio.
-    /*char flag;
-    do{
-  	    cout << "\nFlags :\t0 - CONTINUE\n\t1 - REALTIME\n\t2 - MINIMIZE_LATENCY\n\t3 - HOG_DEVICE\n";
-  	    cin >> flag;
-  	    if(flag == '1'){
-  	    	  options.flags |= RTAUDIO_SCHEDULE_REALTIME;
-  	    }else if(flag == '2'){
-  	    	  options.flags |= RTAUDIO_MINIMIZE_LATENCY;
-  	    }else if(flag == '3'){
-  	    	  options.flags |= RTAUDIO_HOG_DEVICE;
-  	    }
-    }while(flag!='0');*/
-    options.numberOfBuffers = 4;                // Setting number of buffers used by RtAudio
-    options.priority = 1;                       // Setting stream thread priority
-    unsigned int frameSize = iBufferSize;       // Declaring and initializing frame size variable because next statement needs it
-
-    // Opening of audio stream
-    try{
-	       audio->openStream(&outputParameters,     // Specified output parameters
-		               nullptr,			                  // Unspecified input parameters because there will not be input stream
-		               RTAUDIO_FLOAT32,	              // Output buffer will be 32-bit float
-		               SAMPLERATE,			                    // Sample rate will be 44.1 kHz
-		               &frameSize,		                // Frame size will be iBufferSize samples
-		               &rtAudioCallback,	            // Pointer to the function that will be called every time RtAudio needs the buffer to be filled
-		               nullptr,			                  // Unused pointer to get feedback
-		               &options			                  // Stream options (real-time stream, 4 buffers and priority)
-		              );
-     }catch ( int e/*RtAudioError& e*/ ) {     
-         //std::cout << "\nERROR:\t" << e.getMessage() << '\n' << std::endl;
-         std::cout << "\nERROR RtAudio: \t" << '\n' << std::endl;
-         exit(0);
-     }
-     //catch (/*RtError& e*/) {
-     //       //e.printMessage();
-     //       //std::cout << "\nERROR:\t" << e.getMessage() << '\n' << std::endl;
-    	//    exit( 0 );
-     //}
+    AudioSetup();
 
     // Starting the stream
     audio->startStream();
@@ -177,6 +127,65 @@ int main()
 
 
     return 0;
+}
+
+void AudioSetup()
+{
+    // Audio output configuration, using RtAudio (more info in https://www.music.mcgill.ca/~gary/rtaudio/)
+    audio = std::shared_ptr<RtAudio>(new RtAudio());  // Initialization of RtAudio
+    // It uses the first API it founds compiled and requires of preprocessor definitions
+    // which depends on the OS used and the audio output device (more info in https://www.music.mcgill.ca/~gary/rtaudio/compiling.html)
+
+    // Setting the output parameters
+    RtAudio::StreamParameters outputParameters;
+    outputParameters.nChannels = 2;									 // Setting output as stereo 
+
+    //outputParameters.deviceId = audio->getDefaultOutputDevice();	 // Choosing default output device
+    outputParameters.deviceId = SelectAudioDevice();								// Give user the option to choose the output device	
+
+
+
+    // Setting the audio stream options flags.
+    RtAudio::StreamOptions options;
+    options.flags = RTAUDIO_SCHEDULE_REALTIME;						 // Setting real-time audio output, comment this and uncomment next block to choose the flags of RTAudio.
+    /*char flag;
+    do{
+    cout << "\nFlags :\t0 - CONTINUE\n\t1 - REALTIME\n\t2 - MINIMIZE_LATENCY\n\t3 - HOG_DEVICE\n";
+    cin >> flag;
+    if(flag == '1'){
+    options.flags |= RTAUDIO_SCHEDULE_REALTIME;
+    }else if(flag == '2'){
+    options.flags |= RTAUDIO_MINIMIZE_LATENCY;
+    }else if(flag == '3'){
+    options.flags |= RTAUDIO_HOG_DEVICE;
+    }
+    }while(flag!='0');*/
+    options.numberOfBuffers = 4;                // Setting number of buffers used by RtAudio
+    options.priority = 1;                       // Setting stream thread priority
+    unsigned int frameSize = iBufferSize;       // Declaring and initializing frame size variable because next statement needs it
+
+    // Opening of audio stream
+    try {
+        audio->openStream(&outputParameters,     // Specified output parameters
+            nullptr,			                  // Unspecified input parameters because there will not be input stream
+            RTAUDIO_FLOAT32,	              // Output buffer will be 32-bit float
+            SAMPLERATE,			                    // Sample rate will be 44.1 kHz
+            &frameSize,		                // Frame size will be iBufferSize samples
+            &rtAudioCallback,	            // Pointer to the function that will be called every time RtAudio needs the buffer to be filled
+            nullptr,			                  // Unused pointer to get feedback
+            &options			                  // Stream options (real-time stream, 4 buffers and priority)
+        );
+    }
+    catch (int e/*RtAudioError& e*/) {
+        //std::cout << "\nERROR:\t" << e.getMessage() << '\n' << std::endl;
+        std::cout << "\nERROR RtAudio: \t" << '\n' << std::endl;
+        exit(0);
+    }
+    //catch (/*RtError& e*/) {
+    //       //e.printMessage();
+    //       //std::cout << "\nERROR:\t" << e.getMessage() << '\n' << std::endl;
+    //    exit( 0 );
+    //}
 }
 
 int SelectAudioDevice() {
@@ -229,25 +238,22 @@ static int rtAudioCallback(void *outputBuffer, void *inputBuffer, unsigned int u
         floatOutputBuffer = &floatOutputBuffer[1];				 // Updating pointer to next buffer position
     }
 
-    // Moving the steps source
-    sourcePosition.SetPosition(Common::CVector3(sourcePosition.GetPosition().x,
-                                                sourcePosition.GetPosition().y - streamTime / 110.0f,
-                                                sourcePosition.GetPosition().z > 10 ? sourcePosition.GetPosition().z : sourcePosition.GetPosition().z + streamTime / 110.0f));
-    sourceSteps->SetSourceTransform(sourcePosition);
+    // Moving the source2
+    MoveSource_CircularHorizontalPath();
     return 0;
 }
 
 void audioProcess(Common::CEarPair<CMonoBuffer<float>> & bufferOutput, int uiBufferSize)
 {
     // Declaration, initialization and filling mono buffers
-    CMonoBuffer<float> speechInput(uiBufferSize);	FillBuffer(speechInput, wavSamplePositionSpeech, positionEndFrameSpeech, samplesVectorSpeech);
-    CMonoBuffer<float> stepsInput (uiBufferSize);	FillBuffer(stepsInput,  wavSamplePositionSteps,  positionEndFrameSteps,  samplesVectorSteps );
+    CMonoBuffer<float> speechInput(uiBufferSize);	FillBuffer(speechInput, wavSamplePositionSpeech, positionEndFrameSpeech, samplesVectorSource1);
+    CMonoBuffer<float> stepsInput (uiBufferSize);	FillBuffer(stepsInput,  wavSamplePositionSteps,  positionEndFrameSteps,  samplesVectorSource2 );
     
     // Declaration of stereo buffer
     Common::CEarPair<CMonoBuffer<float>> bufferProcessed;
     
-    sourceSpeech->SetBuffer(speechInput);           // Set samples in the sound source
-    sourceSteps->SetBuffer(stepsInput);             // Set samples in the sound source        
+    source1BRT->SetBuffer(speechInput);           // Set samples in the sound source
+    source2BRT->SetBuffer(stepsInput);             // Set samples in the sound source        
     brtManager.ProcessAll();                        // Process all	      
     listener->GetBuffers(bufferProcessed.left, bufferProcessed.right);          // Get out buffers
     
@@ -352,4 +358,34 @@ bool LoadILD( std::string _ildFilePath) {
         std::cout << "Error loading HRTF" << std::endl;
         return false;
     }            
+}
+
+///////////////////////
+// SOURCE MOVEMENT
+///////////////////////
+void MoveSource_CircularHorizontalPath() {
+
+    Common::CVector3 newPosition;
+    source2Azimuth += SOURCE2_INITIAL_SPEED;
+    if (source2Azimuth > 360) source2Azimuth = 0;
+    newPosition = Spherical2Cartesians(source2Azimuth, source2Elevation, source2Distance);
+
+    Common::CTransform sourcePosition = source2BRT->GetCurrentSourceTransform();
+    sourcePosition.SetPosition(newPosition);
+    source2BRT->SetSourceTransform(sourcePosition);
+}
+
+Common::CVector3 Spherical2Cartesians(float azimuth, float elevation, float radius) {
+
+    float x = radius * cos(azimuth) * cos(elevation);
+    float y = radius * sin(azimuth) * cos(elevation);
+    float z = radius * sin(elevation);
+
+    Common::CVector3 pos = listener->GetListenerTransform().GetPosition();
+
+    pos.x = pos.x + x;
+    pos.y = pos.y + y;
+    pos.z = 0.0f;
+
+    return pos;
 }

@@ -32,6 +32,15 @@
 #define ILD_NearFieldEffect_48000 "../../resources/NearFieldCompensation_ILD_48000.sofa"
 #define ILD_NearFieldEffect_96000 "../../resources/NearFieldCompensation_ILD_96000.sofa"
 
+#define SOURCE1_INITIAL_AZIMUTH     90
+#define SOURCE1_INITIAL_ELEVATION   0
+#define SOURCE1_INITIAL_DISTANCE    2
+
+#define SOURCE2_INITIAL_AZIMUTH     0
+#define SOURCE2_INITIAL_ELEVATION   0
+#define SOURCE2_INITIAL_DISTANCE    2
+#define SOURCE2_INITIAL_SPEED       0.001  
+
 #include <cstdio>
 #include <cstring>
 #include <RtAudio.h>
@@ -42,8 +51,8 @@ std::shared_ptr<RtAudio>						audio;												 // Pointer to RtAudio API
 Common::CGlobalParameters globalParameters;                                                     // Class where the global BRT parameters are defined.
 BRTBase::CBRTManager brtManager;                                                                // BRT global manager interface
 std::shared_ptr<BRTListenerModel::CListenerHRTFbasedModel> listener;                            // Pointer to listener model
-std::shared_ptr<BRTSourceModel::CSourceSimpleModel> sourceSpeech;                               // Pointers to each audio source model
-std::shared_ptr<BRTSourceModel::CSourceSimpleModel> sourceSteps;                                // Pointers to each audio source model
+std::shared_ptr<BRTSourceModel::CSourceSimpleModel> source1BRT;                               // Pointers to each audio source model
+std::shared_ptr<BRTSourceModel::CSourceSimpleModel> source2BRT;                                // Pointers to each audio source model
 //std::shared_ptr<BRTSourceModel::CSourceDirectivityModel> sourceWithDirectivity;               // Pointers to each audio source model
 
 BRTReaders::CSOFAReader sofaReader;                                                             // SOFA reader provide by BRT Library
@@ -51,10 +60,14 @@ BRTReaders::CSOFAReader sofaReader;                                             
 std::vector<std::shared_ptr<BRTServices::CHRTF>> HRTF_list;                                     // List of HRTFs sofa loaded
 std::vector<std::shared_ptr<BRTServices::CILD>> ILD_list;                                       // List of NearField coeffients loaded
 
-Common::CTransform						sourcePosition;										 // Storages the position of the steps source
+//Common::CTransform						sourcePosition;										 // Storages the position of the steps source
+float source2Azimuth;
+float source2Elevation;
+float source2Distance;
+
 Common::CEarPair<CMonoBuffer<float>>	outputBufferStereo;									 // Stereo buffer containing processed audio
-std::vector<float>						samplesVectorSpeech;			                     // Storages the audio from the wav files
-std::vector<float>						samplesVectorSteps;			                        // Storages the audio from the wav files
+std::vector<float>						samplesVectorSource1;			                     // Storages the audio from the wav files
+std::vector<float>						samplesVectorSource2;			                        // Storages the audio from the wav files
 
 unsigned int							wavSamplePositionSpeech, positionEndFrameSpeech,	 // Storages, respectively, the starting and ending position of the frame being rendered for each source
                                         wavSamplePositionSteps,  positionEndFrameSteps ;
@@ -71,6 +84,8 @@ void audioProcess(Common::CEarPair<CMonoBuffer<float>>& bufferOutput, int buffer
 *	\param [out] int AudioDeviceID
 */
 int SelectAudioDevice();
+
+void AudioSetup();
 
 /** \brief Fills a buffer with the correct audio frame from the input float vector
 *	\param [out] output output buffer
@@ -100,5 +115,9 @@ static int rtAudioCallback(void *outputBuffer, void *inputBuffer, unsigned int b
 bool LoadSofaFile(std::string _filePath);
 
 bool LoadILD(std::string _ildFilePath);
+
+void MoveSource_CircularHorizontalPath();
+
+Common::CVector3 Spherical2Cartesians(float azimuth, float elevation, float radius);
 
 #endif
