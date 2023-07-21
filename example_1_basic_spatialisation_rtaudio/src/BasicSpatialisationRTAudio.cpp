@@ -318,7 +318,7 @@ bool LoadSofaFile(std::string _filePath) {
     }
     if (globalParameters.GetSampleRate() != sampleRateInSOFAFile)
     {
-        std::cout<<"The sample rate in HRTF SOFA file." << std::endl;
+        std::cout<<"The sample rate in HRTF SOFA file doesn't match the configuration." << std::endl;
         return false;
     }
     bool result = sofaReader.ReadHRTFFromSofa(_filePath, hrtf, HRTFRESAMPLINGSTEP);
