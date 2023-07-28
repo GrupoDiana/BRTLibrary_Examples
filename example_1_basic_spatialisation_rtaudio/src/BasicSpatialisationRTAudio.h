@@ -54,6 +54,8 @@ std::shared_ptr<BRTListenerModel::CListenerHRTFbasedModel> listener;            
 std::shared_ptr<BRTSourceModel::CSourceSimpleModel> source1BRT;                               // Pointers to each audio source model
 std::shared_ptr<BRTSourceModel::CSourceSimpleModel> source2BRT;                                // Pointers to each audio source model
 //std::shared_ptr<BRTSourceModel::CSourceDirectivityModel> sourceWithDirectivity;               // Pointers to each audio source model
+std::shared_ptr<BRTEnvironmentModel::CExampleEnvironmentModel> environmentSource1;
+
 
 BRTReaders::CSOFAReader sofaReader;                                                             // SOFA reader provide by BRT Library
 

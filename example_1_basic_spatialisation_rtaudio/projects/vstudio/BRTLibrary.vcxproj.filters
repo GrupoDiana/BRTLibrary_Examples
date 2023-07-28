@@ -37,6 +37,9 @@
     <Filter Include="include\third_party_libraries\libmysofa\include">
       <UniqueIdentifier>{1ed5b5da-c681-4b34-b8ed-9f1000930867}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\Environment">
+      <UniqueIdentifier>{094827b3-2dc5-4b8f-b0bd-a90babff7937}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\BRTLibrary\include\BRTLibrary.h">
@@ -176,6 +179,18 @@
     </ClInclude>
     <ClInclude Include="..\..\..\BRTLibrary\include\third_party_libraries\libmysofa\include\mysofa.h">
       <Filter>include\third_party_libraries\libmysofa\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Base\EnvironmentModelBase.hpp">
+      <Filter>include\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\SourceModels\VirtualSourceModel.hpp">
+      <Filter>include\SourceModels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\EnvironmentModels\ExampleEnvironmentModel.hpp">
+      <Filter>include\Environment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\EnvironmentModels\ExampleEnvironment.hpp">
+      <Filter>include\Environment</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

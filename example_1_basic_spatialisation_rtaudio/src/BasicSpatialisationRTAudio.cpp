@@ -77,11 +77,21 @@ int main()
         listener->SetILD(ILD_list[0]);
     }
          
+    ///////////////////////
+    // Environment Setup
+    /////////////////////// 
+    brtManager.BeginSetup();
+        environmentSource1 = brtManager.CreateEnvironment<BRTEnvironmentModel::CExampleEnvironmentModel>();
+        environmentSource1->SetFilter(1);
+        listener->ConnectEnvironment(environmentSource1);
+    brtManager.EndSetup();
     /////////////////////
     // source1 setup
     /////////////////////    
     brtManager.BeginSetup();
         source1BRT = brtManager.CreateSoundSource<BRTSourceModel::CSourceSimpleModel>("speech");    // Instatiate a BRT Sound Source
+        
+        environmentSource1->ConnectSoundSource(source1BRT);
         listener->ConnectSoundSource(source1BRT);                                                   // Connect Source to the listener
     brtManager.EndSetup();
     LoadWav(samplesVectorSource1, SOURCE1_FILEPATH);											    // Loading .wav file            
