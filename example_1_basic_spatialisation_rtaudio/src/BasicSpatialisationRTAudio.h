@@ -16,21 +16,21 @@
 *
 * \b Licence: This program is free software, you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 *
-* \b Acknowledgement: This project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement no.101017743
+* \b Acknowledgement: This project has received funding from the European Unionï¿½s Horizon 2020 research and innovation programme under grant agreement no.101017743
 */
 
 #ifndef _BASICSPATIALISATIONRTAUDIO_H_
 #define _BASICSPATIALISATIONRTAUDIO_H_
 
 #define SAMPLERATE 44100
-#define SOFA1_FILEPATH "../../resources/hrtf.sofa"
-#define SOFA2_FILEPATH "../../resources/hrtf.sofa"
-#define SOURCE1_FILEPATH "../../resources/speech.wav"
-#define SOURCE2_FILEPATH "../../resources/steps.wav"
+#define SOFA1_FILEPATH "hrtf.sofa"
+#define SOFA2_FILEPATH "hrtf.sofa"
+#define SOURCE1_FILEPATH "speech.wav"
+#define SOURCE2_FILEPATH "steps.wav"
 #define HRTFRESAMPLINGSTEP 15
-#define ILD_NearFieldEffect_44100 "../../resources/NearFieldCompensation_ILD_44100.sofa"
-#define ILD_NearFieldEffect_48000 "../../resources/NearFieldCompensation_ILD_48000.sofa"
-#define ILD_NearFieldEffect_96000 "../../resources/NearFieldCompensation_ILD_96000.sofa"
+#define ILD_NearFieldEffect_44100 "NearFieldCompensation_ILD_44100.sofa"
+#define ILD_NearFieldEffect_48000 "NearFieldCompensation_ILD_48000.sofa"
+#define ILD_NearFieldEffect_96000 "NearFieldCompensation_ILD_96000.sofa"
 
 #define SOURCE1_INITIAL_AZIMUTH     90
 #define SOURCE1_INITIAL_ELEVATION   0
