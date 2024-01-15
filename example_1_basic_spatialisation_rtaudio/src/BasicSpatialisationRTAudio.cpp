@@ -82,7 +82,7 @@ int main()
     /////////////////////    
     brtManager.BeginSetup();
         source1BRT = brtManager.CreateSoundSource<BRTSourceModel::CSourceSimpleModel>("speech");    // Instatiate a BRT Sound Source
-        listener->ConnectSoundSource(source1BRT);                                                   // Connect Source to the listener
+        listener->ConnectSoundSource(source1BRT);                                                   // Connect Source to the listener        
     brtManager.EndSetup();
     LoadWav(samplesVectorSource1, SOURCE1_FILEPATH);											    // Loading .wav file            
     Common::CTransform source1 = Common::CTransform();                         
@@ -103,7 +103,7 @@ int main()
     Common::CTransform source2 = Common::CTransform();
     source2.SetPosition(Spherical2Cartesians(source2Azimuth, source2Elevation, source2Distance));
     source2BRT->SetSourceTransform(source2);                                           // Set source2 position
-
+    showSource2PositionCounter = 0;
 
     // Declaration and initialization of stereo buffer
   	outputBufferStereo.left.resize(iBufferSize);
@@ -240,6 +240,7 @@ static int rtAudioCallback(void *outputBuffer, void *inputBuffer, unsigned int u
 
     // Moving the source2
     MoveSource_CircularHorizontalPath();
+    ShowSource2Position();
     return 0;
 }
 
@@ -321,7 +322,7 @@ bool LoadSofaFile(std::string _filePath) {
         std::cout<<"The sample rate in HRTF SOFA file doesn't match the configuration." << std::endl;
         return false;
     }
-    bool result = sofaReader.ReadHRTFFromSofa(_filePath, hrtf, HRTFRESAMPLINGSTEP);
+    bool result = sofaReader.ReadHRTFFromSofa(_filePath, hrtf, HRTFRESAMPLINGSTEP, "NearestPoint");
     if (result) {
         std::cout << ("HRTF Sofa file loaded successfully.") << std::endl;
         HRTF_list.push_back(hrtf);
@@ -367,12 +368,12 @@ void MoveSource_CircularHorizontalPath() {
 
     Common::CVector3 newPosition;
     source2Azimuth += SOURCE2_INITIAL_SPEED;
-    if (source2Azimuth > 360) source2Azimuth = 0;
+    if (source2Azimuth > 2* M_PI) source2Azimuth = 0;
     newPosition = Spherical2Cartesians(source2Azimuth, source2Elevation, source2Distance);
-
+    
     Common::CTransform sourcePosition = source2BRT->GetCurrentSourceTransform();
     sourcePosition.SetPosition(newPosition);
-    source2BRT->SetSourceTransform(sourcePosition);
+    source2BRT->SetSourceTransform(sourcePosition);    
 }
 
 Common::CVector3 Spherical2Cartesians(float azimuth, float elevation, float radius) {
@@ -388,4 +389,18 @@ Common::CVector3 Spherical2Cartesians(float azimuth, float elevation, float radi
     pos.z = 0.0f;
 
     return pos;
+}
+
+void ShowSource2Position() {
+
+    showSource2PositionCounter++;
+    if (showSource2PositionCounter == 25) {
+        showSource2PositionCounter = 0;
+        std::cout << "Source 2 --> Azimuth (" << rad2deg(source2Azimuth) << "), Elevation (" << rad2deg(source2Elevation) << "), Distance (" << source2Distance << ")." << std::endl;
+    }
+}
+
+float rad2deg(float rad) {
+
+    return (rad * 180.0) / M_PI;
 }

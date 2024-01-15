@@ -64,6 +64,7 @@ std::vector<std::shared_ptr<BRTServices::CILD>> ILD_list;                       
 float source2Azimuth;
 float source2Elevation;
 float source2Distance;
+int   showSource2PositionCounter;
 
 Common::CEarPair<CMonoBuffer<float>>	outputBufferStereo;									 // Stereo buffer containing processed audio
 std::vector<float>						samplesVectorSource1;			                     // Storages the audio from the wav files
@@ -117,7 +118,9 @@ bool LoadSofaFile(std::string _filePath);
 bool LoadILD(std::string _ildFilePath);
 
 void MoveSource_CircularHorizontalPath();
+void ShowSource2Position();
 
 Common::CVector3 Spherical2Cartesians(float azimuth, float elevation, float radius);
+float rad2deg(float rad);
 
 #endif
