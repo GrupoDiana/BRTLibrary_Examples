@@ -21,7 +21,7 @@ public:
         // This method is where you should put your application's initialisation code..
         juce::ignoreUnused (commandLine);
 
-        mainWindow.reset (new MainWindow (getApplicationName()));
+        mainWindow.reset (new MainWindow (getApplicationName(), new AudioPlaybackDemo, *this));
     }
 
     void shutdown() override
@@ -55,14 +55,15 @@ public:
     class MainWindow final : public juce::DocumentWindow
     {
     public:
-        explicit MainWindow (juce::String name)
+        explicit MainWindow (juce::String name, juce::Component* c, JUCEApplication& a)
             : DocumentWindow (name,
                               juce::Desktop::getInstance().getDefaultLookAndFeel()
                                                           .findColour (ResizableWindow::backgroundColourId),
-                              DocumentWindow::allButtons)
+                              DocumentWindow::allButtons),
+            app(a)
         {
             setUsingNativeTitleBar (true);
-            setContentOwned (new MainComponent(), true);
+            setContentOwned (c, true);
 
            #if JUCE_IOS || JUCE_ANDROID
             setFullScreen (true);
@@ -90,6 +91,8 @@ public:
         */
 
     private:
+        JUCEApplication& app;
+
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainWindow)
     };
 
