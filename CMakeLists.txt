@@ -19,4 +19,4 @@ FetchContent_MakeAvailable(brt)
 
 # Add subdirectories for examples
 add_subdirectory(example_1_basic_spatialisation_rtaudio)
-add_subdirectory(example_2_basic_spatialisation_juce)
+#add_subdirectory(example_2_basic_spatialisation_juce)
