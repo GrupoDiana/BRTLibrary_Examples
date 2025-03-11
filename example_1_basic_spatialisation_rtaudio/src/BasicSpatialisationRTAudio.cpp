@@ -3,100 +3,92 @@
 * \brief This is the header file of the example project 1 using BRT Library
 * \date	June 2023
 *
-* \authors 3DI-DIANA Research Group (University of Malaga), in alphabetical order: M. Cuevas-Rodriguez, D. Gonzalez-Toledo, L. Molina-Tanco, F. Morales-Benitez ||
+* \authors 3DI-DIANA Research Group (University of Malaga), in alphabetical order: M. Cuevas-Rodriguez, D. Gonzalez-Toledo ||
 * Coordinated by , A. Reyes-Lecuona (University of Malaga)||
 * \b Contact: areyes@uma.es
+*
+* \b Copyright: University of Malaga
 *
 * \b Contributions: (additional authors/contributors can be added here)
 *
 * \b Project: SONICOM ||
 * \b Website: https://www.sonicom.eu/
 *
-* \b Copyright: University of Malaga 2023. Code based in the 3DTI Toolkit library (https://github.com/3DTune-In/3dti_AudioToolkit) with Copyright University of Malaga and Imperial College London - 2018
+* \b Acknowledgement: This project has received funding from the European Union�s Horizon 2020 research and innovation programme under grant agreement no.101017743
 *
 * \b Licence: This program is free software, you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-*
-* \b Acknowledgement: This project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement no.101017743
 */
 
 #include "BasicSpatialisationRTAudio.h"
+
 #if defined(__linux__) || defined(linux)
     #include <bits/stdc++.h>
 #endif
 
 int iBufferSize;
-bool bEnableReverb;
+
 int main()
 {
-    //Input buffer size and reverb enable
-    std::cout << "Insert wished buffer size (256, 512, 1024, 2048, 4096...)\n(2048 at least recommended for linux)\t: ";
-    std::cin >> iBufferSize; std::cin.ignore();
-
-    /*char cInput;
-    do{  	std::cout << "\nDo you want reverb? (Y/n) : "; cInput=getchar();
-    }while(cInput != 'y' && cInput != 'n' && cInput != '\n');
-
-    if(cInput=='y' || cInput == '\n') bEnableReverb = true;
-    else       */                       bEnableReverb = false;
-    
-    // Configure BRT Error handler
+    /// Configure BRT Error handler
     BRT_ERRORHANDLER.SetVerbosityMode(VERBOSITYMODE_ERRORSANDWARNINGS);
     BRT_ERRORHANDLER.SetErrorLogStream(&std::cout, true);
 
-    // Global Parametert setup    
+    /// Show introduction message
+	ShowIntroduction(); 
+    
+    /// Select Buffer Size    
+    std::cout << "Insert wished buffer size (256, 512, 1024, 2048, 4096...)\n(2048 at least recommended for linux)\t: ";
+    std::cin >> iBufferSize; 
+    std::cin.ignore();
+        
+    /// AUDIO setup            
+    AudioSetup();
+
+    /// BRT Global Parametert setup    
     globalParameters.SetSampleRate(SAMPLERATE);     // Setting sample rate
     globalParameters.SetBufferSize(iBufferSize);    // Setting buffer size
-
-    /////////////////////
-    // Listener setup
-    /////////////////////
+           
+    //////////////////////////
+    // Listener Setup
+    //////////////////////////      
     brtManager.BeginSetup();
-    listener = brtManager.CreateListener<BRTListenerModel::CListenerHRTFbasedModel>("listener1");
-    brtManager.EndSetup();    
+    listener = brtManager.CreateListener<BRTBase::CListener>(LISTENER_ID);
+    brtManager.EndSetup();
     Common::CTransform listenerPosition = Common::CTransform();		 // Setting listener in (0,0,0)
     listenerPosition.SetPosition(Common::CVector3(0, 0, 0));
     listener->SetListenerTransform(listenerPosition);
-    
-    // We can activate/deactivate different parameters of the listener in the following way
-    //listener->DisableSpatialization();
-    //listener->DisableInterpolation();
-    //listener->DisableNearFieldEffect();
 
-
-    // Load HRTFs from SOFA files            
-    bool hrtfSofaLoaded1 = LoadSofaFile(SOFA1_FILEPATH);
-    bool hrtfSofaLoaded2 = LoadSofaFile(SOFA2_FILEPATH);
-    // Set one for the listener. We can change it at runtime    
-    if (hrtfSofaLoaded1) {
-        listener->SetHRTF(HRTF_list[0]);
+    /////////////////////////////////////
+    // Create and connnect BRT modules
+    /////////////////////////////////////
+    char selection = ShowConfigurationMenu();
+    if (selection == 'A')
+    {        
+		configurationA.Setup(&brtManager, LISTENER_ID);
+		configurationA.LoadResources(&brtManager, LISTENER_ID);
+    } else {
+		std::cout << "Invalid option. Exiting program.\n";
+		return 0;
     }
-    // LOAD NEARFIELD ILD coefficients 
-    bool ildSofaLoaded = LoadILD(ILD_NearFieldEffect_44100);
-    // Set to the listener
-    if (ildSofaLoaded) {
-        listener->SetILD(ILD_list[0]);
-    }
-         
+                            
     /////////////////////
-    // source1 setup
-    /////////////////////    
-    brtManager.BeginSetup();
-        source1BRT = brtManager.CreateSoundSource<BRTSourceModel::CSourceSimpleModel>("speech");    // Instatiate a BRT Sound Source
-        listener->ConnectSoundSource(source1BRT);                                                   // Connect Source to the listener        
-    brtManager.EndSetup();
-    LoadWav(samplesVectorSource1, SOURCE1_FILEPATH);											    // Loading .wav file            
-    Common::CTransform source1 = Common::CTransform();                         
-    source1.SetPosition(Spherical2Cartesians(SOURCE1_INITIAL_AZIMUTH, SOURCE1_INITIAL_ELEVATION, SOURCE1_INITIAL_DISTANCE));
-    source1BRT->SetSourceTransform(source1);                                           // Set source1 position
+    // Create Sources
+    /////////////////////            
+    source1BRT = CreateSimpleSoundSource("speech");
+    source2BRT = CreateSimpleSoundSource("steps");
+    
+    if (selection == 'A') {
+        configurationA.ConnectSoundSource(&brtManager, "speech");
+        configurationA.ConnectSoundSource(&brtManager, "steps");
+    }
             
     /////////////////////
-    // source2 setup
-    /////////////////////
-    brtManager.BeginSetup();
-        source2BRT = brtManager.CreateSoundSource<BRTSourceModel::CSourceSimpleModel>("steps");      // Instatiate a BRT Sound Source
-        listener->ConnectSoundSource(source2BRT);                                                    // Connect Source to the listener
-    brtManager.EndSetup();    
-    LoadWav(samplesVectorSource2, SOURCE2_FILEPATH);											   // Loading .wav file    
+    // Setup Sources
+    /////////////////////      
+    Common::CTransform source1 = Common::CTransform();
+    source1.SetPosition(Spherical2Cartesians(SOURCE1_INITIAL_AZIMUTH, SOURCE1_INITIAL_ELEVATION, SOURCE1_INITIAL_DISTANCE));
+    source1BRT->SetSourceTransform(source1);
+    	
     source2Azimuth      = SOURCE2_INITIAL_AZIMUTH;
     source2Elevation    = SOURCE2_INITIAL_ELEVATION;
     source2Distance     = SOURCE2_INITIAL_DISTANCE;
@@ -105,12 +97,18 @@ int main()
     source2BRT->SetSourceTransform(source2);                                           // Set source2 position
     showSource2PositionCounter = 0;
 
+    /////////////////////
+    // Load Wav Files
+    ///////////////////// 
+    LoadWav(samplesVectorSource1, SOURCE1_FILEPATH);        // Loading .wav file            
+    LoadWav(samplesVectorSource2, SOURCE2_FILEPATH);        // Loading .wav file
+
+    /////////////////////
+    // Start AUDIO Render
+    /////////////////////     
     // Declaration and initialization of stereo buffer
   	outputBufferStereo.left.resize(iBufferSize);
-  	outputBufferStereo.right.resize(iBufferSize);
-
-
-    AudioSetup();
+  	outputBufferStereo.right.resize(iBufferSize);    
 
     // Starting the stream
     audio->startStream();
@@ -118,8 +116,7 @@ int main()
     // Informing user by the console to press any key to end the execution
     std::cout << "Press ENTER to finish... \n";
     std::cin.ignore();
-    getchar();
-
+    char temp = getchar();
 
     // Stopping and closing the stream
     audio->stopStream();
@@ -129,9 +126,9 @@ int main()
     return 0;
 }
 
+/// Audio output configuration, using RtAudio (more info in https://www.music.mcgill.ca/~gary/rtaudio/)
 void AudioSetup()
-{
-    // Audio output configuration, using RtAudio (more info in https://www.music.mcgill.ca/~gary/rtaudio/)
+{   
     audio = std::shared_ptr<RtAudio>(new RtAudio());  // Initialization of RtAudio
     // It uses the first API it founds compiled and requires of preprocessor definitions
     // which depends on the OS used and the audio output device (more info in https://www.music.mcgill.ca/~gary/rtaudio/compiling.html)
@@ -141,25 +138,12 @@ void AudioSetup()
     outputParameters.nChannels = 2;									 // Setting output as stereo 
 
     //outputParameters.deviceId = audio->getDefaultOutputDevice();	 // Choosing default output device
-    outputParameters.deviceId = SelectAudioDevice();								// Give user the option to choose the output device	
-
-
+    outputParameters.deviceId = ShowSelectAudioDeviceMenu();								// Give user the option to choose the output device	
 
     // Setting the audio stream options flags.
     RtAudio::StreamOptions options;
     options.flags = RTAUDIO_SCHEDULE_REALTIME;						 // Setting real-time audio output, comment this and uncomment next block to choose the flags of RTAudio.
-    /*char flag;
-    do{
-    cout << "\nFlags :\t0 - CONTINUE\n\t1 - REALTIME\n\t2 - MINIMIZE_LATENCY\n\t3 - HOG_DEVICE\n";
-    cin >> flag;
-    if(flag == '1'){
-    options.flags |= RTAUDIO_SCHEDULE_REALTIME;
-    }else if(flag == '2'){
-    options.flags |= RTAUDIO_MINIMIZE_LATENCY;
-    }else if(flag == '3'){
-    options.flags |= RTAUDIO_HOG_DEVICE;
-    }
-    }while(flag!='0');*/
+    
     options.numberOfBuffers = 4;                // Setting number of buffers used by RtAudio
     options.priority = 1;                       // Setting stream thread priority
     unsigned int frameSize = iBufferSize;       // Declaring and initializing frame size variable because next statement needs it
@@ -176,41 +160,44 @@ void AudioSetup()
             &options			                  // Stream options (real-time stream, 4 buffers and priority)
         );
     }
-    catch (int e/*RtAudioError& e*/) {
-        //std::cout << "\nERROR:\t" << e.getMessage() << '\n' << std::endl;
+    catch (int e) {        
         std::cout << "\nERROR RtAudio: \t" << '\n' << std::endl;
         exit(0);
-    }
-    //catch (/*RtError& e*/) {
-    //       //e.printMessage();
-    //       //std::cout << "\nERROR:\t" << e.getMessage() << '\n' << std::endl;
-    //    exit( 0 );
-    //}
+    }   
 }
 
-int SelectAudioDevice() {
+/// Function to show the user a menu to choose the audio output device
+int ShowSelectAudioDeviceMenu() {
 
     std::vector<unsigned int> deviceIds = audio->getDeviceIds();
-	int connectedAudioDevices = audio->getDeviceCount();
-	std::cout << "     List of available audio outputs" << std::endl;
+	int connectedAudioDevices = audio->getDeviceCount();    
+	std::string apiName = audio->getApiName(audio->getCurrentApi());
+
+    std::cout << std::endl<< std::endl;
     std::cout << "----------------------------------------" << std::endl;
+    std::cout << "     List of available audio outputs" << std::endl;    
+    std::cout << "----------------------------------------" << std::endl << std::endl;
+    std::cout << " Current API: " << apiName << std::endl;
 	for (int i = 0; i < deviceIds.size(); i++) {
         //auto temp = audio->getDeviceInfo(deviceIds[i]);
-        std::cout << "ID: " << i << "-" << audio->getDeviceInfo(deviceIds[i]).name << std::endl;
+        std::cout << "ID: " << i << " - " << audio->getDeviceInfo(deviceIds[i]).name << " ";
+        std::cout << audio->getDeviceInfo(deviceIds[i]).outputChannels << " ";
+        std::cout << audio->getDeviceInfo(deviceIds[i]).inputChannels << " ";        
+        std::cout << std::endl;
 	}
-	int selectAudioDevice;
-	//cout << "Please choose which audio output you wish to use: ";
-	//cin >> selectAudioDevice; cin.ignore();	
+    std::cout << std::endl;
+	int selectAudioDevice;	
 	do {		
 		std::cout << "Please choose which audio output you wish to use: ";
 		std::cin >> selectAudioDevice;
 		std::cin.clear();
 		std::cin.ignore(INT_MAX, '\n');
 	} while (!(selectAudioDevice > -1 && selectAudioDevice <= connectedAudioDevices));
-	
+    std::cout << std::endl;
 	return deviceIds[selectAudioDevice];
 }
 
+///
 static int rtAudioCallback(void *outputBuffer, void *inputBuffer, unsigned int uiBufferSize, double streamTime, RtAudioStreamStatus status, void *data)
 {
     // Setting the output buffer as float
@@ -244,6 +231,7 @@ static int rtAudioCallback(void *outputBuffer, void *inputBuffer, unsigned int u
     return 0;
 }
 
+/// Function to process audio
 void audioProcess(Common::CEarPair<CMonoBuffer<float>> & bufferOutput, int uiBufferSize)
 {
     // Declaration, initialization and filling mono buffers
@@ -264,6 +252,7 @@ void audioProcess(Common::CEarPair<CMonoBuffer<float>> & bufferOutput, int uiBuf
     
 }
 
+/// Function to fill buffer with audio from the wav file
 void FillBuffer(CMonoBuffer<float> &output, unsigned int& position, unsigned int& endFrame, std::vector<float>& samplesVector)
 {
     position = endFrame + 1;							 // Set starting point as next sample of the end of last frame
@@ -309,56 +298,48 @@ void LoadWav(std::vector<float>& samplesVector, const char* stringIn)
         samplesVector.push_back((float)sample[i] / (float)INT16_MAX);				 // Converting samples to float to push them in samples vector
 }
 
-bool LoadSofaFile(std::string _filePath) {
-    std::shared_ptr<BRTServices::CHRTF> hrtf = std::make_shared<BRTServices::CHRTF>();
 
-    int sampleRateInSOFAFile = sofaReader.GetSampleRateFromSofa(_filePath);
-    if (sampleRateInSOFAFile == -1) {
-        std::cout << ("Error loading HRTF Sofa file") << std::endl;
-        return false;
-    }
-    if (globalParameters.GetSampleRate() != sampleRateInSOFAFile)
-    {
-        std::cout<<"The sample rate in HRTF SOFA file doesn't match the configuration." << std::endl;
-        return false;
-    }
-    bool result = sofaReader.ReadHRTFFromSofa(_filePath, hrtf, HRTFRESAMPLINGSTEP, "NearestPoint");
-    if (result) {
-        std::cout << ("HRTF Sofa file loaded successfully.") << std::endl;
-        HRTF_list.push_back(hrtf);
-        return true;
-    }
-    else {
-        std::cout << ("Error loading HRTF") << std::endl;
-        return false;
-    }
+///////////////////////
+// MENU
+///////////////////////
+// Function to display the introduction message
+void ShowIntroduction() {
+    std::cout << "============================================\n";
+    std::cout << "     Welcome to the BRT Library\n";
+    std::cout << "============================================\n\n";
+    std::cout << "BRT is a modular library designed to provide highly configurable rendering adaptable to various needs.\n";
+    std::cout << "Thanks to its flexible structure, it allows multiple modules to be interconnected to optimize performance according to the user's specific requirements.\n\n";
+    std::cout << "This example demonstrates different ways to instantiate and configure the modules, although many more possibilities are not explored here, such as rendering with multiple listeners.\n\n";
+    std::cout << "The purpose of this example is to serve as an introductory guide to using the library. You are free to use, copy, or modify the code as needed.\n\n";
+    
+    std::cout << "As a demonstration, in this example, you will hear a woman's voice coming from your left while footsteps move around you simultaneously.\n";
+    std::cout << "The screen will display the position of these footsteps in real-time.\n\n";
+
+    std::cout << "============================================\n\n";
 }
 
-bool LoadILD( std::string _ildFilePath) {
-    std::shared_ptr<BRTServices::CILD> ild = std::make_shared<BRTServices::CILD>();
-    
-    
-    int sampleRateInSOFAFile = sofaReader.GetSampleRateFromSofa(_ildFilePath);
-    if (sampleRateInSOFAFile == -1) {
-        std::cout << ("Error loading ILD Sofa file") << std::endl;
-        return false;
-    }
-    if (globalParameters.GetSampleRate() != sampleRateInSOFAFile)
-    {
-        std::cout << "The sample rate in ILD SOFA file" << std::endl;
-        return false;
-    }
-    
-    bool result = sofaReader.ReadILDFromSofa(_ildFilePath, ild);
-    if (result) {
-        std::cout << "ILD Sofa file loaded successfully: " << std::endl;
-        ILD_list.push_back(ild);
-        return true;
-    }
-    else {
-        std::cout << "Error loading HRTF" << std::endl;
-        return false;
-    }            
+// Function to display the configuration menu and get the user’s choice
+char ShowConfigurationMenu() {
+    char option;
+
+    do {
+        std::cout << "===== CONFIGURATION MENU =====\n";
+        std::cout << "A) Sources --> ListenerHRTFModel (Nearfield + Convolution) --> Listener\n";
+        std::cout << "B) Configuration 2\n";
+        std::cout << "C) Configuration 3\n";
+        std::cout << "D) Configuration 4\n";
+        std::cout << "Select an option (A-D): ";
+        std::cin >> option;
+
+        // Convert to uppercase to avoid issues with lowercase input
+        option = std::toupper(option);
+
+        if (option < 'A' || option > 'D') {
+            std::cout << "❌ Invalid option. Please try again.\n";
+        }
+    } while (option < 'A' || option > 'D');  // Repeat until a valid option is chosen
+
+    return option;
 }
 
 ///////////////////////
@@ -371,7 +352,7 @@ void MoveSource_CircularHorizontalPath() {
     if (source2Azimuth > 2* M_PI) source2Azimuth = 0;
     newPosition = Spherical2Cartesians(source2Azimuth, source2Elevation, source2Distance);
     
-    Common::CTransform sourcePosition = source2BRT->GetCurrentSourceTransform();
+    Common::CTransform sourcePosition = source2BRT->GetSourceTransform();
     sourcePosition.SetPosition(newPosition);
     source2BRT->SetSourceTransform(sourcePosition);    
 }
@@ -403,4 +384,17 @@ void ShowSource2Position() {
 float rad2deg(float rad) {
 
     return (rad * 180.0) / M_PI;
+}
+
+///////////////////////
+// BRT SETUP
+///////////////////////
+std::shared_ptr<BRTSourceModel::CSourceSimpleModel> CreateSimpleSoundSource(std::string _soundSourceID) {
+    brtManager.BeginSetup();
+        std::shared_ptr<BRTSourceModel::CSourceSimpleModel> _brtSoundSource = brtManager.CreateSoundSource<BRTSourceModel::CSourceSimpleModel>(_soundSourceID);
+    brtManager.EndSetup();
+    if (_brtSoundSource == nullptr) {        
+		std::cout << "Error creating sound source" << std::endl;
+    }
+	return _brtSoundSource;
 }

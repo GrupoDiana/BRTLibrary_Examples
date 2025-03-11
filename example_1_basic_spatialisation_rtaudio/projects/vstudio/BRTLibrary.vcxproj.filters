@@ -37,6 +37,21 @@
     <Filter Include="include\third_party_libraries\libmysofa\include">
       <UniqueIdentifier>{1ed5b5da-c681-4b34-b8ed-9f1000930867}</UniqueIdentifier>
     </Filter>
+    <Filter Include="include\BinauralFilter">
+      <UniqueIdentifier>{8f4bd070-8abc-4cf9-b384-9fade1bb3acc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\Connectivity">
+      <UniqueIdentifier>{d262b131-742f-46af-977d-7da3759c937c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\EnvironmentModels">
+      <UniqueIdentifier>{4e115701-d4d8-4e0f-9abb-fab74baae60b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\EnvironmentModels\FreeFieldEnvironment">
+      <UniqueIdentifier>{d0e9b7be-c1cc-4baf-be2e-8655faae3fb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\EnvironmentModels\SDNEnvironment">
+      <UniqueIdentifier>{2fbd8db0-c0c0-4a27-84eb-13ebd5437766}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\BRTLibrary\include\BRTLibrary.h">
@@ -45,35 +60,65 @@
     <ClInclude Include="..\..\..\BRTLibrary\include\Base\BRTManager.hpp">
       <Filter>include\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\Base\Command.hpp">
+    <ClInclude Include="..\..\..\BRTLibrary\include\Readers\LibMySofaLoader.hpp">
+      <Filter>include\Readers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Readers\SofaReader.hpp">
+      <Filter>include\Readers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\third_party_libraries\nlohmann\json.hpp">
+      <Filter>include\third_party_libraries\nlohmann</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\third_party_libraries\libmysofa\include\mysofa.h">
+      <Filter>include\third_party_libraries\libmysofa\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Base\Listener.hpp">
       <Filter>include\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\Base\CommandEntryPointManager.hpp">
+    <ClInclude Include="..\..\..\BRTLibrary\include\Base\ListenerBase.hpp">
       <Filter>include\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\Base\EntryPoint.hpp">
+    <ClInclude Include="..\..\..\BRTLibrary\include\Base\ModelBase.hpp">
       <Filter>include\Base</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\Base\EntryPointManager.hpp">
-      <Filter>include\Base</Filter>
+    <ClInclude Include="..\..\..\BRTLibrary\include\BinauralFilter\BinauralFilterBase.hpp">
+      <Filter>include\BinauralFilter</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\Base\ExitPoint.hpp">
-      <Filter>include\Base</Filter>
+    <ClInclude Include="..\..\..\BRTLibrary\include\BinauralFilter\SOSBinauralFilter.hpp">
+      <Filter>include\BinauralFilter</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\Base\ExitPointManager.hpp">
-      <Filter>include\Base</Filter>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Connectivity\AdvancedEntryPointManager.hpp">
+      <Filter>include\Connectivity</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\Base\ListenerModelBase.hpp">
-      <Filter>include\Base</Filter>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Connectivity\BRTConnectivity.hpp">
+      <Filter>include\Connectivity</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\Base\ObserverBase.hpp">
-      <Filter>include\Base</Filter>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Connectivity\Command.hpp">
+      <Filter>include\Connectivity</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\Base\ProcessorBase.hpp">
-      <Filter>include\Base</Filter>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Connectivity\CommandEntryPointManager.hpp">
+      <Filter>include\Connectivity</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\Base\SourceModelBase.hpp">
-      <Filter>include\Base</Filter>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Connectivity\EntryPoint.hpp">
+      <Filter>include\Connectivity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Connectivity\EntryPointManager.hpp">
+      <Filter>include\Connectivity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Connectivity\ExitPoint.hpp">
+      <Filter>include\Connectivity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Connectivity\ExitPointManager.hpp">
+      <Filter>include\Connectivity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Connectivity\ObserverBase.hpp">
+      <Filter>include\Connectivity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Common\AddDelayExpansionMethod.hpp">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Common\AudioMixer.hpp">
+      <Filter>include\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\BRTLibrary\include\Common\BiquadFilter.hpp">
       <Filter>include\Common</Filter>
@@ -87,7 +132,16 @@
     <ClInclude Include="..\..\..\BRTLibrary\include\Common\Conventions.hpp">
       <Filter>include\Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Common\CranicalGeometry.hpp">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Common\EnvelopeDetector.hpp">
+      <Filter>include\Common</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\BRTLibrary\include\Common\ErrorHandler.hpp">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Common\FFTCalculator.hpp">
       <Filter>include\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\BRTLibrary\include\Common\fftsg.hpp">
@@ -96,103 +150,103 @@
     <ClInclude Include="..\..\..\BRTLibrary\include\Common\FiltersChain.hpp">
       <Filter>include\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\Common\Fprocessor.hpp">
-      <Filter>include\Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\BRTLibrary\include\Common\GlobalParameters.hpp">
       <Filter>include\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\Common\Quaternion.hpp">
-      <Filter>include\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\Common\Transform.hpp">
-      <Filter>include\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\Common\UPCAnechoic.hpp">
-      <Filter>include\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\Common\Vector3.hpp">
-      <Filter>include\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerHRTFbasedModel.hpp">
-      <Filter>include\ListenerModels</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\DistanceAttenuation.hpp">
-      <Filter>include\ProcessingModules</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\DistanceAttenuationProcessor.hpp">
-      <Filter>include\ProcessingModules</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\HRTFConvolver.hpp">
-      <Filter>include\ProcessingModules</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\HRTFConvolverProcessor.hpp">
-      <Filter>include\ProcessingModules</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\MultipleInputProcessor.hpp">
-      <Filter>include\ProcessingModules</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\NearFieldEffect.hpp">
-      <Filter>include\ProcessingModules</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\NearFieldEffectProcessor.hpp">
-      <Filter>include\ProcessingModules</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\SingleBinauralProcessor.hpp">
-      <Filter>include\ProcessingModules</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\SingleProcessor.hpp">
-      <Filter>include\ProcessingModules</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\Readers\LibMySofaLoader.hpp">
-      <Filter>include\Readers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\Readers\SofaReader.hpp">
-      <Filter>include\Readers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\ServiceModules\HRTF.hpp">
-      <Filter>include\ServiceModules</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\ServiceModules\ILD.hpp">
-      <Filter>include\ServiceModules</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\ServiceModules\ServiceModuleInterfaces.hpp">
-      <Filter>include\ServiceModules</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\SourceModels\SourceDirectivityModel.hpp">
-      <Filter>include\SourceModels</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\SourceModels\SourceSimpleModel.hpp">
-      <Filter>include\SourceModels</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\third_party_libraries\nlohmann\json.hpp">
-      <Filter>include\third_party_libraries\nlohmann</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\third_party_libraries\libmysofa\include\mysofa.h">
-      <Filter>include\third_party_libraries\libmysofa\include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\Common\AddDelayExpansionMethod.hpp">
-      <Filter>include\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\Common\AmbisonicEncoder.hpp">
-      <Filter>include\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\Common\EnvelopeDetector.hpp">
+    <ClInclude Include="..\..\..\BRTLibrary\include\Common\IRWindowing.hpp">
       <Filter>include\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\BRTLibrary\include\Common\Profiler.hpp">
       <Filter>include\Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Common\Quaternion.hpp">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Common\RMSCalculator.hpp">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Common\Room.hpp">
+      <Filter>include\Common</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\BRTLibrary\include\Common\SourceListenerRelativePositionCalculation.hpp">
       <Filter>include\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerVirtualAmbisonicBasedModel.hpp">
+    <ClInclude Include="..\..\..\BRTLibrary\include\Common\Transform.hpp">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Common\Vector3.hpp">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Common\Wall.hpp">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\Common\Waveguide.hpp">
+      <Filter>include\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerAmbisonicEnvironmentBRIRModel.hpp">
       <Filter>include\ListenerModels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerAmbisonicHRTFModel.hpp">
+      <Filter>include\ListenerModels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerEnvironmentBRIRModel.hpp">
+      <Filter>include\ListenerModels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerHRTFModel.hpp">
+      <Filter>include\ListenerModels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerModelBase.hpp">
+      <Filter>include\ListenerModels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\EnvironmentModels\EnvironmentModelBase.hpp">
+      <Filter>include\EnvironmentModels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\EnvironmentModels\FreeFieldEnvironmentModel.hpp">
+      <Filter>include\EnvironmentModels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\EnvironmentModels\SDNEnvironmentModel.hpp">
+      <Filter>include\EnvironmentModels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\EnvironmentModels\VirtualSourceList.hpp">
+      <Filter>include\EnvironmentModels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\EnvironmentModels\FreeFieldEnvironment\FreeFieldEnvironment.hpp">
+      <Filter>include\EnvironmentModels\FreeFieldEnvironment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\EnvironmentModels\FreeFieldEnvironment\FreeFieldEnvironmentProcessor.hpp">
+      <Filter>include\EnvironmentModels\FreeFieldEnvironment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\EnvironmentModels\SDNEnvironment\ScatteringNode.hpp">
+      <Filter>include\EnvironmentModels\SDNEnvironment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\EnvironmentModels\SDNEnvironment\SDNDelayLine.hpp">
+      <Filter>include\EnvironmentModels\SDNEnvironment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\EnvironmentModels\SDNEnvironment\SDNEnvironment.hpp">
+      <Filter>include\EnvironmentModels\SDNEnvironment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\EnvironmentModels\SDNEnvironment\SDNEnvironmentProcessor.hpp">
+      <Filter>include\EnvironmentModels\SDNEnvironment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\EnvironmentModels\SDNEnvironment\SDNNode.hpp">
+      <Filter>include\EnvironmentModels\SDNEnvironment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\EnvironmentModels\SDNEnvironment\SDNParameters.hpp">
+      <Filter>include\EnvironmentModels\SDNEnvironment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\EnvironmentModels\SDNEnvironment\SDNUtils.hpp">
+      <Filter>include\EnvironmentModels\SDNEnvironment</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\EnvironmentModels\SDNEnvironment\WaveGuide.hpp">
+      <Filter>include\EnvironmentModels\SDNEnvironment</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\AmbisonicDomainConvolver.hpp">
       <Filter>include\ProcessingModules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\AmbisonicDomainConvolverProcessor.hpp">
+      <Filter>include\ProcessingModules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\AmbisonicEncoder.hpp">
       <Filter>include\ProcessingModules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\BilateralAmbisonicEncoder.hpp">
@@ -201,7 +255,25 @@
     <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\BilateralAmbisonicEncoderProcessor.hpp">
       <Filter>include\ProcessingModules</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\BinauralFilter.hpp">
+      <Filter>include\ProcessingModules</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\DirectivityTFConvolver.hpp">
+      <Filter>include\ProcessingModules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\DistanceAttenuator.hpp">
+      <Filter>include\ProcessingModules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\HRTFConvolver.hpp">
+      <Filter>include\ProcessingModules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\HRTFConvolverProcessor.hpp">
+      <Filter>include\ProcessingModules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\NearFieldEffectProcessor.hpp">
+      <Filter>include\ProcessingModules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\UniformPartitionedConvolution.hpp">
       <Filter>include\ProcessingModules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\BRTLibrary\include\ServiceModules\AmbisonicBIR.hpp">
@@ -220,6 +292,12 @@
       <Filter>include\ServiceModules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\BRTLibrary\include\ServiceModules\GridsManager.hpp">
+      <Filter>include\ServiceModules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\ServiceModules\HRBRIR.hpp">
+      <Filter>include\ServiceModules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\ServiceModules\HRTF.hpp">
       <Filter>include\ServiceModules</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\BRTLibrary\include\ServiceModules\HRTFAuxiliarMethods.hpp">
@@ -243,8 +321,26 @@
     <ClInclude Include="..\..\..\BRTLibrary\include\ServiceModules\OnlineInterpolation.hpp">
       <Filter>include\ServiceModules</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\ServiceModules\ServicesBase.hpp">
+      <Filter>include\ServiceModules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\ServiceModules\SOSFilters.hpp">
+      <Filter>include\ServiceModules</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\BRTLibrary\include\ServiceModules\VirtualSpeakers.hpp">
       <Filter>include\ServiceModules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\SourceModels\SourceDirectivityModel.hpp">
+      <Filter>include\SourceModels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\SourceModels\SourceModelBase.hpp">
+      <Filter>include\SourceModels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\SourceModels\SourceSimpleModel.hpp">
+      <Filter>include\SourceModels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\SourceModels\VirtualSourceModel.hpp">
+      <Filter>include\SourceModels</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

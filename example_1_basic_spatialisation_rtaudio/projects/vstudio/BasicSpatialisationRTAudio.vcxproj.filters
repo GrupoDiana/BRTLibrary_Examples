@@ -18,6 +18,12 @@
     <ClInclude Include="..\..\src\BasicSpatialisationRTAudio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\ConfigurationA.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\AppUtils.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\BasicSpatialisationRTAudio.cpp">

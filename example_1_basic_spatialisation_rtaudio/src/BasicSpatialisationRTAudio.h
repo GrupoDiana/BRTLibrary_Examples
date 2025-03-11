@@ -22,15 +22,13 @@
 #ifndef _BASICSPATIALISATIONRTAUDIO_H_
 #define _BASICSPATIALISATIONRTAUDIO_H_
 
+#define LISTENER_ID "listener1"
+
 #define SAMPLERATE 44100
-#define SOFA1_FILEPATH "../../resources/hrtf.sofa"
-#define SOFA2_FILEPATH "../../resources/hrtf.sofa"
+
 #define SOURCE1_FILEPATH "../../resources/speech.wav"
 #define SOURCE2_FILEPATH "../../resources/steps.wav"
 #define HRTFRESAMPLINGSTEP 15
-#define ILD_NearFieldEffect_44100 "../../resources/NearFieldCompensation_ILD_44100.sofa"
-#define ILD_NearFieldEffect_48000 "../../resources/NearFieldCompensation_ILD_48000.sofa"
-#define ILD_NearFieldEffect_96000 "../../resources/NearFieldCompensation_ILD_96000.sofa"
 
 #define SOURCE1_INITIAL_AZIMUTH     90
 #define SOURCE1_INITIAL_ELEVATION   0
@@ -45,33 +43,31 @@
 #include <cstring>
 #include <RtAudio.h>
 #include <BRTLibrary.h>
+#include "ConfigurationA.hpp"
 
-std::shared_ptr<RtAudio>						audio;												 // Pointer to RtAudio API
+std::shared_ptr<RtAudio>    audio;										// Pointer to RtAudio API
+Common::CGlobalParameters globalParameters;                             // Class where the global BRT parameters are defined.
+BRTBase::CBRTManager brtManager;                                        // BRT global manager interface
+std::shared_ptr<BRTBase::CListener> listener;                           // Pointer to listener model
 
-Common::CGlobalParameters globalParameters;                                                     // Class where the global BRT parameters are defined.
-BRTBase::CBRTManager brtManager;                                                                // BRT global manager interface
-std::shared_ptr<BRTListenerModel::CListenerHRTFbasedModel> listener;                            // Pointer to listener model
-std::shared_ptr<BRTSourceModel::CSourceSimpleModel> source1BRT;                               // Pointers to each audio source model
-std::shared_ptr<BRTSourceModel::CSourceSimpleModel> source2BRT;                                // Pointers to each audio source model
-//std::shared_ptr<BRTSourceModel::CSourceDirectivityModel> sourceWithDirectivity;               // Pointers to each audio source model
+std::shared_ptr<BRTSourceModel::CSourceSimpleModel> source1BRT;           // Pointers to each audio source model
+std::shared_ptr<BRTSourceModel::CSourceSimpleModel> source2BRT;           // Pointers to each audio source model
 
-BRTReaders::CSOFAReader sofaReader;                                                             // SOFA reader provide by BRT Library
+CConfigurationA configurationA;                                           // Configuration class for the example A
 
-std::vector<std::shared_ptr<BRTServices::CHRTF>> HRTF_list;                                     // List of HRTFs sofa loaded
-std::vector<std::shared_ptr<BRTServices::CILD>> ILD_list;                                       // List of NearField coeffients loaded
-
-//Common::CTransform						sourcePosition;										 // Storages the position of the steps source
 float source2Azimuth;
 float source2Elevation;
 float source2Distance;
 int   showSource2PositionCounter;
 
-Common::CEarPair<CMonoBuffer<float>>	outputBufferStereo;									 // Stereo buffer containing processed audio
-std::vector<float>						samplesVectorSource1;			                     // Storages the audio from the wav files
-std::vector<float>						samplesVectorSource2;			                        // Storages the audio from the wav files
+Common::CEarPair<CMonoBuffer<float>>	outputBufferStereo;		// Stereo buffer containing processed audio
+std::vector<float>						samplesVectorSource1;	// Storages the audio from the wav files
+std::vector<float>						samplesVectorSource2;	// Storages the audio from the wav files
 
-unsigned int							wavSamplePositionSource1, positionEndFrameSource1,	 // Storages, respectively, the starting and ending position of the frame being rendered for each source
-                                        wavSamplePositionSource2,  positionEndFrameSource2 ;
+unsigned int wavSamplePositionSource1; // Storages, respectively, the starting and ending position of the frame being rendered for each source
+unsigned int positionEndFrameSource1;	 
+unsigned int wavSamplePositionSource2;
+unsigned int positionEndFrameSource2;
 
 
 
@@ -84,7 +80,7 @@ void audioProcess(Common::CEarPair<CMonoBuffer<float>>& bufferOutput, int buffer
 /** \brief This method shows the user a very simple menu that allows him to choose the audio interface to be used.
 *	\param [out] int AudioDeviceID
 */
-int SelectAudioDevice();
+int ShowSelectAudioDeviceMenu();
 
 void AudioSetup();
 
@@ -113,14 +109,14 @@ void LoadWav(std::vector<float>& samplesVector, const char* stringIn);
 */
 static int rtAudioCallback(void *outputBuffer, void *inputBuffer, unsigned int bufferSize, double streamTime, RtAudioStreamStatus status, void *data);
 
-bool LoadSofaFile(std::string _filePath);
-
-bool LoadILD(std::string _ildFilePath);
-
 void MoveSource_CircularHorizontalPath();
 void ShowSource2Position();
-
 Common::CVector3 Spherical2Cartesians(float azimuth, float elevation, float radius);
 float rad2deg(float rad);
 
+
+void ShowIntroduction();
+char ShowConfigurationMenu();
+
+std::shared_ptr<BRTSourceModel::CSourceSimpleModel> CreateSimpleSoundSource(std::string _soundSourceID);
 #endif
