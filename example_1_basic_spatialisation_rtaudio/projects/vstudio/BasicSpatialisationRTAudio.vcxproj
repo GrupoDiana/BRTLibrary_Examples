@@ -134,6 +134,7 @@ $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
       <SDLCheck>true</SDLCheck>
       <AdditionalUsingDirectories>%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -192,6 +193,8 @@ $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
     <ClInclude Include="..\..\src\AppUtils.hpp" />
     <ClInclude Include="..\..\src\BasicSpatialisationRTAudio.h" />
     <ClInclude Include="..\..\src\ConfigurationA.hpp" />
+    <ClInclude Include="..\..\src\ConfigurationB.hpp" />
+    <ClInclude Include="..\..\src\ConfigurationC.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

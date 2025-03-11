@@ -22,7 +22,7 @@
 #include "BasicSpatialisationRTAudio.h"
 
 #if defined(__linux__) || defined(linux)
-    #include <bits/stdc++.h>
+    #include <bits/stdc++.h>    
 #endif
 
 int iBufferSize;
@@ -63,9 +63,18 @@ int main()
     /////////////////////////////////////
     char selection = ShowConfigurationMenu();
     if (selection == 'A')
-    {        
-		configurationA.Setup(&brtManager, LISTENER_ID);
-		configurationA.LoadResources(&brtManager, LISTENER_ID);
+    {
+        configurationA.Setup(&brtManager, LISTENER_ID);
+        configurationA.LoadResources(&brtManager, LISTENER_ID);
+	}
+    else if (selection == 'B') {
+        configurationB.Setup(&brtManager, LISTENER_ID);
+        configurationB.LoadResources(&brtManager, LISTENER_ID);
+        configurationB.ConfigureFreeFieldEnviromentModel(&brtManager, true, true);
+	}
+	else if (selection == 'C') {
+		configurationC.Setup(&brtManager, LISTENER_ID);
+		configurationC.LoadResources(&brtManager, LISTENER_ID);
     } else {
 		std::cout << "Invalid option. Exiting program.\n";
 		return 0;
@@ -80,6 +89,14 @@ int main()
     if (selection == 'A') {
         configurationA.ConnectSoundSource(&brtManager, "speech");
         configurationA.ConnectSoundSource(&brtManager, "steps");
+	}
+	else if (selection == 'B') {
+		configurationB.ConnectSoundSource(&brtManager, "speech");
+		configurationB.ConnectSoundSource(&brtManager, "steps");
+	}
+    else if (selection == 'C') {
+        configurationC.ConnectSoundSource(&brtManager, "speech");
+        configurationC.ConnectSoundSource(&brtManager, "steps");
     }
             
     /////////////////////
@@ -109,12 +126,18 @@ int main()
     // Declaration and initialization of stereo buffer
   	outputBufferStereo.left.resize(iBufferSize);
   	outputBufferStereo.right.resize(iBufferSize);    
-
+   
+    // Informing user by the console to press any key to end the execution    
+    std::cout << std::endl << std::endl;
+    std::cout << "Press any key to start and later press ENTER to finish..." << std::endl;
+    std::cout << std::endl << std::endl;
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Clear input buffer
+    std::cin.get();  // Wait for a key press
+    
     // Starting the stream
-    audio->startStream();
-
-    // Informing user by the console to press any key to end the execution
-    std::cout << "Press ENTER to finish... \n";
+    audio->startStream();        
+    
+	// Wait enter to finish
     std::cin.ignore();
     char temp = getchar();
 
@@ -324,10 +347,11 @@ char ShowConfigurationMenu() {
 
     do {
         std::cout << "===== CONFIGURATION MENU =====\n";
-        std::cout << "A) Sources --> ListenerHRTFModel (Nearfield + Convolution) --> Listener\n";
-        std::cout << "B) Configuration 2\n";
-        std::cout << "C) Configuration 3\n";
-        std::cout << "D) Configuration 4\n";
+        std::cout << "A) Sources --> Listener HRTF Model (Nearfield + Convolution) --> Listener\n";
+        std::cout << "B) Sources --> Environment Model (FreeField) --> ListenerHRTFModel (Nearfield + Convolution) --> Listener\n";
+        std::cout << "C) Sources|--> Listener HRTF Model (Nearfield + Convolution) --> |Listener\n";
+        std::cout << "          |--> Listener BRIR Model (Ambisonic)               --> |\n";
+        std::cout << "D) No yet implemented\n";
         std::cout << "Select an option (A-D): ";
         std::cin >> option;
 

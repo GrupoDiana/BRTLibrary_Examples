@@ -44,6 +44,8 @@
 #include <RtAudio.h>
 #include <BRTLibrary.h>
 #include "ConfigurationA.hpp"
+#include "ConfigurationB.hpp"
+#include "ConfigurationC.hpp"
 
 std::shared_ptr<RtAudio>    audio;										// Pointer to RtAudio API
 Common::CGlobalParameters globalParameters;                             // Class where the global BRT parameters are defined.
@@ -54,6 +56,8 @@ std::shared_ptr<BRTSourceModel::CSourceSimpleModel> source1BRT;           // Poi
 std::shared_ptr<BRTSourceModel::CSourceSimpleModel> source2BRT;           // Pointers to each audio source model
 
 CConfigurationA configurationA;                                           // Configuration class for the example A
+CConfigurationB configurationB;                                           // Configuration class for the example B
+CConfigurationC configurationC;                                           // Configuration class for the example C
 
 float source2Azimuth;
 float source2Elevation;

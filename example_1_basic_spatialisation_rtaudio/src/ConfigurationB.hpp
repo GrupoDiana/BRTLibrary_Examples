@@ -2,10 +2,11 @@
 #include <BRTLibrary.h>
 #include "AppUtils.hpp"
 
-#ifndef _CONFIGURATION_A_HPP_
-#define _CONFIGURATION_A_HPP_
+#ifndef _CONFIGURATION_B_HPP_
+#define _CONFIGURATION_B_HPP_
 
 #define LISTENER_HRTF_MODEL_ID "listenerHRTF1"
+#define ENVIRONMENT_MODEL_ID "FreeField"
 
 #define SOFA1_FILEPATH "../../resources/hrtf.sofa"
 
@@ -14,10 +15,10 @@
 #define ILD_NearFieldEffect_96000 "../../resources/NearFieldCompensation_ILD_96000.sofa"
 
 
-class CConfigurationA
+class CConfigurationB
 {
 public:
-    CConfigurationA() {};    
+    CConfigurationB() {};    
 
 
     void Setup(BRTBase::CBRTManager* brtManager, const std::string& listenerID) {
@@ -25,11 +26,24 @@ public:
         brtManager->BeginSetup();
         
         std::shared_ptr<BRTListenerModel::CListenerHRTFModel>listenerModel = brtManager->CreateListenerModel<BRTListenerModel::CListenerHRTFModel>(LISTENER_HRTF_MODEL_ID);
+		if (listenerModel == nullptr) {
+			std::cout << "Error creating listener model" << std::endl;            
+		}
         
+        std::shared_ptr<BRTEnvironmentModel::CFreeFieldEnvironmentModel> environmentModel = brtManager->CreateEnvironment<BRTEnvironmentModel::CFreeFieldEnvironmentModel>(ENVIRONMENT_MODEL_ID);
+		if (environmentModel == nullptr) {
+			std::cout << "Error creating environment model" << std::endl;            
+		}
+
         std::shared_ptr<BRTBase::CListener> listener = brtManager->GetListener(listenerID);
         bool control = listener->ConnectListenerModel(LISTENER_HRTF_MODEL_ID);
         if (!control) {
             std::cout << "Error connecting listener model" << std::endl;
+        }
+
+        control = listenerModel->ConnectEnvironmentModel(ENVIRONMENT_MODEL_ID);        
+        if (!control) {
+            std::cout << "Error connecting enviroment model" << std::endl;
         }
 
         brtManager->EndSetup();		
@@ -58,15 +72,33 @@ public:
 
     }
 
-    void ConnectSoundSource(BRTBase::CBRTManager* brtManager, const std::string& _soundSourceID) {
-        std::shared_ptr<BRTListenerModel::CListenerModelBase> listenerModel = brtManager->GetListenerModel<BRTListenerModel::CListenerModelBase>(LISTENER_HRTF_MODEL_ID);
-        if (listenerModel != nullptr) {
+    void ConnectSoundSource(BRTBase::CBRTManager* brtManager, const std::string& _soundSourceID) {               
+        std::shared_ptr<BRTEnvironmentModel::CEnviromentModelBase> environmentModel = brtManager->GetEnvironmentModel<BRTEnvironmentModel::CEnviromentModelBase>(ENVIRONMENT_MODEL_ID);
+        if (environmentModel != nullptr) {
             brtManager->BeginSetup();
-            bool control = listenerModel->ConnectSoundSource(_soundSourceID);
+            bool control = environmentModel->ConnectSoundSource(_soundSourceID);
             brtManager->EndSetup();
         }
     }
 
+    void ConfigureFreeFieldEnviromentModel(BRTBase::CBRTManager* brtManager, bool _enableDistanceAttenuation, bool _enablePropagationDelay) {
+		std::shared_ptr<BRTEnvironmentModel::CEnviromentModelBase> environmentModel = brtManager->GetEnvironmentModel<BRTEnvironmentModel::CEnviromentModelBase>(ENVIRONMENT_MODEL_ID);
+        if (environmentModel != nullptr) {
+            if (_enableDistanceAttenuation) {
+                environmentModel->EnableDistanceAttenuation();
+            }
+            else {
+                environmentModel->DisableDistanceAttenuation();
+            }
+            if (_enablePropagationDelay) {
+                environmentModel->EnablePropagationDelay();
+            }
+            else
+            {
+                environmentModel->DisablePropagationDelay();
+            }
+        }
+    }    
 private:
 
 };
