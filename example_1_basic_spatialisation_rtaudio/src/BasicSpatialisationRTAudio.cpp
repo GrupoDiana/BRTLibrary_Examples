@@ -129,7 +129,7 @@ int main()
    
     // Informing user by the console to press any key to end the execution    
     std::cout << std::endl << std::endl;
-    std::cout << "Press any key to start and later press ENTER to finish..." << std::endl;
+    std::cout << "Press ENTER to start, and then press ENTER again when you want to finish..." << std::endl;
     std::cout << std::endl << std::endl;
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Clear input buffer
     std::cin.get();  // Wait for a key press
@@ -374,8 +374,15 @@ void MoveSource_CircularHorizontalPath() {
     Common::CVector3 newPosition;
     source2Azimuth += SOURCE2_INITIAL_SPEED;
     if (source2Azimuth > 2* M_PI) source2Azimuth = 0;
+        
+    // Calcule new position
     newPosition = Spherical2Cartesians(source2Azimuth, source2Elevation, source2Distance);
-    
+	// Just in case Listener is not in (0,0,0)
+    newPosition.x = newPosition.x + listener->GetListenerTransform().GetPosition().x;
+	newPosition.y = newPosition.y + listener->GetListenerTransform().GetPosition().y;
+	newPosition.z = newPosition.z + listener->GetListenerTransform().GetPosition().z;
+	
+    // Apply new position to source2
     Common::CTransform sourcePosition = source2BRT->GetSourceTransform();
     sourcePosition.SetPosition(newPosition);
     source2BRT->SetSourceTransform(sourcePosition);    
@@ -387,11 +394,7 @@ Common::CVector3 Spherical2Cartesians(float azimuth, float elevation, float radi
     float y = radius * sin(azimuth) * cos(elevation);
     float z = radius * sin(elevation);
 
-    Common::CVector3 pos = listener->GetListenerTransform().GetPosition();
-
-    pos.x = pos.x + x;
-    pos.y = pos.y + y;
-    pos.z = 0.0f;
+    Common::CVector3 pos(x, y, z);
 
     return pos;
 }
