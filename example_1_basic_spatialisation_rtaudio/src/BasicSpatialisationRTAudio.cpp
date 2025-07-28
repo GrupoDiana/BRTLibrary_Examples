@@ -83,8 +83,8 @@ int main()
     /////////////////////
     // Create Sources
     /////////////////////            
-    source1BRT = CreateSimpleSoundSource("speech");
-    source2BRT = CreateSimpleSoundSource("steps");
+    source1BRT = CreateOmnidirectionalSoundSource("speech");
+    source2BRT = CreateOmnidirectionalSoundSource("steps");
     
     if (selection == 'A') {
         configurationA.ConnectSoundSource(&brtManager, "speech");
@@ -347,10 +347,10 @@ char ShowConfigurationMenu() {
 
     do {
         std::cout << "===== CONFIGURATION MENU =====\n";
-        std::cout << "A) Sources --> Listener HRTF Model (Nearfield + Convolution) --> Listener\n";
-        std::cout << "B) Sources --> Environment Model (FreeField) --> ListenerHRTFModel (Nearfield + Convolution) --> Listener\n";
-        std::cout << "C) Sources|--> Listener HRTF Model (Nearfield + Convolution) --> |Listener\n";
-        std::cout << "          |--> Listener BRIR Model (Ambisonic)               --> |\n";
+        std::cout << "A) Sources --> Listener Direct HRTF Convolution Model (Nearfield + Convolution) --> Listener\n";
+        std::cout << "B) Sources --> Environment Model (FreeField) --> Listener Direct HRTF ConvolutionModel (Nearfield + Convolution) --> Listener\n";
+        std::cout << "C) Sources|--> Listener Direct HRTF Convolution Model (Nearfield + Convolution) --> |Listener\n";
+        std::cout << "          |--> Listener Ambisonic ReverberantVirtual Loudspeakers Model (RVL)   --> |\n";
         std::cout << "D) No yet implemented\n";
         std::cout << "Select an option (A-D): ";
         std::cin >> option;
@@ -416,9 +416,9 @@ float rad2deg(float rad) {
 ///////////////////////
 // BRT SETUP
 ///////////////////////
-std::shared_ptr<BRTSourceModel::CSourceSimpleModel> CreateSimpleSoundSource(std::string _soundSourceID) {
+std::shared_ptr<BRTSourceModel::CSourceOmnidirectionalModel> CreateOmnidirectionalSoundSource(std::string _soundSourceID) {
     brtManager.BeginSetup();
-        std::shared_ptr<BRTSourceModel::CSourceSimpleModel> _brtSoundSource = brtManager.CreateSoundSource<BRTSourceModel::CSourceSimpleModel>(_soundSourceID);
+        std::shared_ptr<BRTSourceModel::CSourceOmnidirectionalModel> _brtSoundSource = brtManager.CreateSoundSource<BRTSourceModel::CSourceOmnidirectionalModel>(_soundSourceID);
     brtManager.EndSetup();
     if (_brtSoundSource == nullptr) {        
 		std::cout << "Error creating sound source" << std::endl;

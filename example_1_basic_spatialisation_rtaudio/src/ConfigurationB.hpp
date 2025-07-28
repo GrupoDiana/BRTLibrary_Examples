@@ -25,7 +25,7 @@ public:
         		
         brtManager->BeginSetup();
         
-        std::shared_ptr<BRTListenerModel::CListenerHRTFModel>listenerModel = brtManager->CreateListenerModel<BRTListenerModel::CListenerHRTFModel>(LISTENER_HRTF_MODEL_ID);
+        std::shared_ptr<BRTListenerModel::CListenerDirectHRTFConvolutionModel>listenerModel = brtManager->CreateListenerModel<BRTListenerModel::CListenerDirectHRTFConvolutionModel>(LISTENER_HRTF_MODEL_ID);
 		if (listenerModel == nullptr) {
 			std::cout << "Error creating listener model" << std::endl;            
 		}

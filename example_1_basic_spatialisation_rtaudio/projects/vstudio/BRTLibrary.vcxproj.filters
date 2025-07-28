@@ -37,9 +37,6 @@
     <Filter Include="include\third_party_libraries\libmysofa\include">
       <UniqueIdentifier>{1ed5b5da-c681-4b34-b8ed-9f1000930867}</UniqueIdentifier>
     </Filter>
-    <Filter Include="include\BinauralFilter">
-      <UniqueIdentifier>{8f4bd070-8abc-4cf9-b384-9fade1bb3acc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="include\Connectivity">
       <UniqueIdentifier>{d262b131-742f-46af-977d-7da3759c937c}</UniqueIdentifier>
     </Filter>
@@ -51,6 +48,9 @@
     </Filter>
     <Filter Include="include\EnvironmentModels\SDNEnvironment">
       <UniqueIdentifier>{2fbd8db0-c0c0-4a27-84eb-13ebd5437766}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\BilateralFilter">
+      <UniqueIdentifier>{8f4bd070-8abc-4cf9-b384-9fade1bb3acc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -80,12 +80,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\BRTLibrary\include\Base\ModelBase.hpp">
       <Filter>include\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\BinauralFilter\BinauralFilterBase.hpp">
-      <Filter>include\BinauralFilter</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\BinauralFilter\SOSBinauralFilter.hpp">
-      <Filter>include\BinauralFilter</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\BRTLibrary\include\Connectivity\AdvancedEntryPointManager.hpp">
       <Filter>include\Connectivity</Filter>
@@ -182,18 +176,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\BRTLibrary\include\Common\Waveguide.hpp">
       <Filter>include\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerAmbisonicEnvironmentBRIRModel.hpp">
-      <Filter>include\ListenerModels</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerAmbisonicHRTFModel.hpp">
-      <Filter>include\ListenerModels</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerEnvironmentBRIRModel.hpp">
-      <Filter>include\ListenerModels</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerHRTFModel.hpp">
-      <Filter>include\ListenerModels</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerModelBase.hpp">
       <Filter>include\ListenerModels</Filter>
@@ -336,10 +318,28 @@
     <ClInclude Include="..\..\..\BRTLibrary\include\SourceModels\SourceModelBase.hpp">
       <Filter>include\SourceModels</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\SourceModels\SourceSimpleModel.hpp">
+    <ClInclude Include="..\..\..\BRTLibrary\include\SourceModels\VirtualSourceModel.hpp">
       <Filter>include\SourceModels</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\BRTLibrary\include\SourceModels\VirtualSourceModel.hpp">
+    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerAmbisonicReverberantVirtualLoudspeakersModel.hpp">
+      <Filter>include\ListenerModels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerAmbisonicVirtualLoudspeakersModel.hpp">
+      <Filter>include\ListenerModels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerDirectBRIRConvolution.hpp">
+      <Filter>include\ListenerModels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerDirectHRTFConvolution.hpp">
+      <Filter>include\ListenerModels</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\BilateralFilter\BilateralFilterBase.hpp">
+      <Filter>include\BilateralFilter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\BilateralFilter\SOSBilateralFilter.hpp">
+      <Filter>include\BilateralFilter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\BRTLibrary\include\SourceModels\SourceOmnidirectionalModel.hpp">
       <Filter>include\SourceModels</Filter>
     </ClInclude>
   </ItemGroup>

@@ -52,8 +52,8 @@ Common::CGlobalParameters globalParameters;                             // Class
 BRTBase::CBRTManager brtManager;                                        // BRT global manager interface
 std::shared_ptr<BRTBase::CListener> listener;                           // Pointer to listener model
 
-std::shared_ptr<BRTSourceModel::CSourceSimpleModel> source1BRT;           // Pointers to each audio source model
-std::shared_ptr<BRTSourceModel::CSourceSimpleModel> source2BRT;           // Pointers to each audio source model
+std::shared_ptr<BRTSourceModel::CSourceOmnidirectionalModel> source1BRT;           // Pointers to each audio source model
+std::shared_ptr<BRTSourceModel::CSourceOmnidirectionalModel> source2BRT;           // Pointers to each audio source model
 
 CConfigurationA configurationA;                                           // Configuration class for the example A
 CConfigurationB configurationB;                                           // Configuration class for the example B
@@ -122,5 +122,5 @@ float rad2deg(float rad);
 void ShowIntroduction();
 char ShowConfigurationMenu();
 
-std::shared_ptr<BRTSourceModel::CSourceSimpleModel> CreateSimpleSoundSource(std::string _soundSourceID);
+std::shared_ptr<BRTSourceModel::CSourceOmnidirectionalModel> CreateOmnidirectionalSoundSource(std::string _soundSourceID);
 #endif

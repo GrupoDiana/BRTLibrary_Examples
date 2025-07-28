@@ -29,7 +29,7 @@ public:
         std::shared_ptr<BRTBase::CListener> listener = brtManager->GetListener(listenerID);
 
 
-        std::shared_ptr<BRTListenerModel::CListenerHRTFModel>listenerHRTFModel = brtManager->CreateListenerModel<BRTListenerModel::CListenerHRTFModel>(LISTENER_HRTF_MODEL_ID);
+        std::shared_ptr<BRTListenerModel::CListenerDirectHRTFConvolutionModel>listenerHRTFModel = brtManager->CreateListenerModel<BRTListenerModel::CListenerDirectHRTFConvolutionModel>(LISTENER_HRTF_MODEL_ID);
 		if (listenerHRTFModel == nullptr) {
 			std::cout << "Error creating listener model" << std::endl;
 		}        
@@ -38,7 +38,7 @@ public:
             std::cout << "Error connecting listener model" << std::endl;
         }
 
-        std::shared_ptr<BRTListenerModel::CListenerAmbisonicEnvironmentBRIRModel>listenerAmbisonicBRIRModel = brtManager->CreateListenerModel<BRTListenerModel::CListenerAmbisonicEnvironmentBRIRModel>(LISTENER_BRIR_MODEL_ID);
+        std::shared_ptr<BRTListenerModel::CListenerAmbisonicReverberantVirtualLoudspeakersModel>listenerAmbisonicBRIRModel = brtManager->CreateListenerModel<BRTListenerModel::CListenerAmbisonicReverberantVirtualLoudspeakersModel>(LISTENER_BRIR_MODEL_ID);
 		if (listenerAmbisonicBRIRModel == nullptr) {
 			std::cout << "Error creating listener model" << std::endl;
 		}

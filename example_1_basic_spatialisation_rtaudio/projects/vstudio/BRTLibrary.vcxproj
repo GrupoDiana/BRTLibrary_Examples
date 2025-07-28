@@ -23,8 +23,8 @@
     <ClInclude Include="..\..\..\BRTLibrary\include\Base\Listener.hpp" />
     <ClInclude Include="..\..\..\BRTLibrary\include\Base\ListenerBase.hpp" />
     <ClInclude Include="..\..\..\BRTLibrary\include\Base\ModelBase.hpp" />
-    <ClInclude Include="..\..\..\BRTLibrary\include\BinauralFilter\BinauralFilterBase.hpp" />
-    <ClInclude Include="..\..\..\BRTLibrary\include\BinauralFilter\SOSBinauralFilter.hpp" />
+    <ClInclude Include="..\..\..\BRTLibrary\include\BilateralFilter\BilateralFilterBase.hpp" />
+    <ClInclude Include="..\..\..\BRTLibrary\include\BilateralFilter\SOSBilateralFilter.hpp" />
     <ClInclude Include="..\..\..\BRTLibrary\include\BRTLibrary.h" />
     <ClInclude Include="..\..\..\BRTLibrary\include\Common\AddDelayExpansionMethod.hpp" />
     <ClInclude Include="..\..\..\BRTLibrary\include\Common\AudioMixer.hpp" />
@@ -72,10 +72,10 @@
     <ClInclude Include="..\..\..\BRTLibrary\include\EnvironmentModels\SDNEnvironment\SDNUtils.hpp" />
     <ClInclude Include="..\..\..\BRTLibrary\include\EnvironmentModels\SDNEnvironment\WaveGuide.hpp" />
     <ClInclude Include="..\..\..\BRTLibrary\include\EnvironmentModels\VirtualSourceList.hpp" />
-    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerAmbisonicEnvironmentBRIRModel.hpp" />
-    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerAmbisonicHRTFModel.hpp" />
-    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerEnvironmentBRIRModel.hpp" />
-    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerHRTFModel.hpp" />
+    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerAmbisonicReverberantVirtualLoudspeakersModel.hpp" />
+    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerAmbisonicVirtualLoudspeakersModel.hpp" />
+    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerDirectBRIRConvolution.hpp" />
+    <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerDirectHRTFConvolution.hpp" />
     <ClInclude Include="..\..\..\BRTLibrary\include\ListenerModels\ListenerModelBase.hpp" />
     <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\AmbisonicDomainConvolver.hpp" />
     <ClInclude Include="..\..\..\BRTLibrary\include\ProcessingModules\AmbisonicDomainConvolverProcessor.hpp" />
@@ -111,7 +111,7 @@
     <ClInclude Include="..\..\..\BRTLibrary\include\ServiceModules\VirtualSpeakers.hpp" />
     <ClInclude Include="..\..\..\BRTLibrary\include\SourceModels\SourceDirectivityModel.hpp" />
     <ClInclude Include="..\..\..\BRTLibrary\include\SourceModels\SourceModelBase.hpp" />
-    <ClInclude Include="..\..\..\BRTLibrary\include\SourceModels\SourceSimpleModel.hpp" />
+    <ClInclude Include="..\..\..\BRTLibrary\include\SourceModels\SourceOmnidirectionalModel.hpp" />
     <ClInclude Include="..\..\..\BRTLibrary\include\SourceModels\VirtualSourceModel.hpp" />
     <ClInclude Include="..\..\..\BRTLibrary\include\third_party_libraries\libmysofa\include\mysofa.h" />
     <ClInclude Include="..\..\..\BRTLibrary\include\third_party_libraries\nlohmann\json.hpp" />
