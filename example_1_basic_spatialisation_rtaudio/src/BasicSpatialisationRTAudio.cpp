@@ -350,7 +350,7 @@ char ShowConfigurationMenu() {
         std::cout << "A) Sources --> Listener Direct HRTF Convolution Model (Nearfield + Convolution) --> Listener\n";
         std::cout << "B) Sources --> Environment Model (FreeField) --> Listener Direct HRTF ConvolutionModel (Nearfield + Convolution) --> Listener\n";
         std::cout << "C) Sources|--> Listener Direct HRTF Convolution Model (Nearfield + Convolution) --> |Listener\n";
-        std::cout << "          |--> Listener Ambisonic ReverberantVirtual Loudspeakers Model (RVL)   --> |\n";
+        std::cout << "          |--> Listener Ambisonic Reverberant Virtual Loudspeakers Model (RVL)   --> |\n";
         std::cout << "D) No yet implemented\n";
         std::cout << "Select an option (A-D): ";
         std::cin >> option;
