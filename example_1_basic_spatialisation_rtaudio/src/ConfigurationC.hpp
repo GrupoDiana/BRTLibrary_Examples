@@ -54,7 +54,7 @@ public:
         std::shared_ptr<BRTBase::CListener> listener = brtManager->GetListener(listenerID);
         
         /// Load HRTF
-        std::shared_ptr<BRTServices::CHRTF> hrtf1 = std::make_shared<BRTServices::CHRTF>();
+        std::shared_ptr<BRTServices::CSphericalInterpolatedFIRTable> hrtf1 = std::make_shared<BRTServices::CSphericalInterpolatedFIRTable>();
         bool hrtfSofaLoaded1 = AppUtils::LoadHRTFSofaFile(SOFA1_FILEPATH, hrtf1);        
         // Set one for the listener. We can change it at runtime    
         if (hrtfSofaLoaded1) {
@@ -62,7 +62,7 @@ public:
         }
 
         /// LOAD NEARFIELD ILD coefficients 
-        std::shared_ptr<BRTServices::CSOSFilters> sosFilter = std::make_shared<BRTServices::CSOSFilters>();                
+        std::shared_ptr<BRTServices::CSphericalSOSTable> sosFilter = std::make_shared<BRTServices::CSphericalSOSTable>();
         bool nearFieldFilterLoaded = AppUtils::LoadNearFieldSOSFilter(ILD_NearFieldEffect_44100, sosFilter);
         // Set to the listener
         if (nearFieldFilterLoaded) {            
@@ -72,7 +72,7 @@ public:
         }
 
 		/// Load BRIR
-		std::shared_ptr<BRTServices::CHRBRIR> brir = std::make_shared<BRTServices::CHRBRIR>();
+		std::shared_ptr<BRTServices::CSphericalFIRTable> brir = std::make_shared<BRTServices::CSphericalFIRTable>();
 		bool brirSofaLoaded = AppUtils::LoadBRIRSofaFile(SOFA2_FILEPATH, brir,0,0,0,0);
         if (brirSofaLoaded) {
             listener->SetHRBRIR(brir);

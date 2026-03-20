@@ -9,7 +9,7 @@
 
 static class AppUtils {
 public:
-    static bool LoadHRTFSofaFile(const std::string & _filePath, std::shared_ptr<BRTServices::CHRTF> hrtf) {
+    static bool LoadHRTFSofaFile(const std::string & _filePath, std::shared_ptr<BRTServices::CSphericalInterpolatedFIRTable> hrtf) {
                 
         BRTReaders::CSOFAReader sofaReader;
         Common::CGlobalParameters globalParameters;      
@@ -36,7 +36,7 @@ public:
         }
     }
 
-    static bool LoadBRIRSofaFile(const std::string& _filePath, std::shared_ptr<BRTServices::CHRBRIR> brir
+    static bool LoadBRIRSofaFile(const std::string& _filePath, std::shared_ptr<BRTServices::CSphericalFIRTable> brir
         , float _fadeWindowThreshold, float _fadeInWindowRiseTime
         , float _fadeOutWindowThreshold, float _fadeOutWindowRiseTime) {
 
@@ -54,7 +54,7 @@ public:
             return false;
         }
         std::cout << std::endl << "Loadind BRIR SOFA File....." << std::endl << std::endl;
-        bool result = sofaReader.ReadBRIRFromSofa(_filePath, brir, HRTFRESAMPLINGSTEP, BRTServices::TEXTRAPOLATION_METHOD::zero_insertion, _fadeWindowThreshold, _fadeInWindowRiseTime, _fadeOutWindowThreshold, _fadeOutWindowRiseTime);
+        bool result = sofaReader.ReadBRIRFromSofa(_filePath, brir, _fadeWindowThreshold, _fadeInWindowRiseTime, _fadeOutWindowThreshold, _fadeOutWindowRiseTime);
         if (result) {
             std::cout << ("BRIR Sofa file loaded successfully.") << std::endl;            
             return true;
@@ -65,7 +65,7 @@ public:
         }
     }
 
-    static bool LoadNearFieldSOSFilter(std::string _ildFilePath, std::shared_ptr<BRTServices::CSOSFilters> _sosFilter) {
+    static bool LoadNearFieldSOSFilter(std::string _ildFilePath, std::shared_ptr<BRTServices::CSphericalSOSTable> _sosFilter) {
         
         BRTReaders::CSOFAReader sofaReader;
         Common::CGlobalParameters globalParameters;
